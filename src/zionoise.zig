@@ -349,3 +349,19 @@ test "fbmSimplex2D different lacunarity" {
     const v2 = fbmSimplex2D(f32, 1.5, 1.5, 42, 4, 3.0, 0.5);
     try std.testing.expect(v1 != v2);
 }
+
+test "perlin2D negative coords" {
+    const v = perlin2D(f32, -1.5, -2.5, 42);
+    try std.testing.expect(v > -1.5 and v < 1.5);
+}
+
+test "simplex2D negative coords" {
+    const v = simplex2D(f32, -1.0, -1.0, 42);
+    try std.testing.expect(v > -2.0 and v < 2.0);
+}
+
+test "fbmSimplex2D different seeds" {
+    const a = fbmSimplex2D(f32, 1.7, 2.3, 1, 4, 2.0, 0.5);
+    const b = fbmSimplex2D(f32, 1.7, 2.3, 2, 4, 2.0, 0.5);
+    try std.testing.expect(a != b);
+}
