@@ -439,3 +439,30 @@ test "same seed always same result" {
     const b = perlin2D(f32, 1.5, 2.5, 999);
     try std.testing.expectEqual(a, b);
 }
+
+test "perlin2D output range is bounded" {
+    // Sample many points, verify all in [-1, 1] range
+    var max: f32 = 0;
+    var y: f32 = 0;
+    while (y < 5) : (y += 0.5) {
+        var x: f32 = 0;
+        while (x < 5) : (x += 0.5) {
+            const v = perlin2D(f32, x, y, 42);
+            max = @max(max, @abs(v));
+        }
+    }
+    try std.testing.expect(max < 1.5); // perlin noise is bounded
+}
+
+test "simplex2D output range is bounded" {
+    var max: f32 = 0;
+    var y: f32 = 0;
+    while (y < 5) : (y += 0.7) {
+        var x: f32 = 0;
+        while (x < 5) : (x += 0.7) {
+            const v = simplex2D(f32, x, y, 42);
+            max = @max(max, @abs(v));
+        }
+    }
+    try std.testing.expect(max < 2.0);
+}
