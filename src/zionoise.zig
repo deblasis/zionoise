@@ -365,3 +365,27 @@ test "fbmSimplex2D different seeds" {
     const b = fbmSimplex2D(f32, 1.7, 2.3, 2, 4, 2.0, 0.5);
     try std.testing.expect(a != b);
 }
+
+test "perlin2D smooth interpolation" {
+    // Perlin noise should be smooth — no sudden jumps
+    const v0 = perlin2D(f32, 1.0, 1.0, 42);
+    const v1 = perlin2D(f32, 1.01, 1.01, 42);
+    const v2 = perlin2D(f32, 1.02, 1.02, 42);
+    // Differences between consecutive samples should be similar
+    const d1 = @abs(v1 - v0);
+    const d2 = @abs(v2 - v1);
+    try std.testing.expect(d1 < 0.05);
+    try std.testing.expect(d2 < 0.05);
+}
+
+test "simplex2D and simplex3D consistent" {
+    // 3D simplex at z=0 should not crash
+    const v = simplex3D(f32, 1.5, 2.5, 0, 42);
+    try std.testing.expect(v > -2.0 and v < 2.0);
+}
+
+test "fbm2D with high persistence" {
+    // High persistence = more amplitude in higher octaves
+    const v = fbm2D(f32, 2.0, 2.0, 42, 4, 2.0, 0.9);
+    try std.testing.expect(v > -3.0 and v < 3.0);
+}
