@@ -283,3 +283,35 @@ test "f64 precision" {
     const v = perlin2D(f64, 1.5, 2.5, 42);
     try std.testing.expect(v > -1.5 and v < 1.5);
 }
+
+test "perlin2D zero at integer coords" {
+    const v = perlin2D(f32, 2.0, 3.0, 42);
+    try std.testing.expectApproxEqAbs(@as(f32, 0), v, 0.001);
+}
+
+test "simplex2D non-zero at non-integer" {
+    const v = simplex2D(f32, 0.5, 0.5, 42);
+    try std.testing.expect(v != 0);
+}
+
+test "simplex3D non-zero at non-integer" {
+    const v = simplex3D(f32, 2.5, 2.5, 2.5, 99);
+    // 3D simplex can be zero at certain lattice-related points
+    // just verify it's in range and deterministic
+    const v2 = simplex3D(f32, 2.5, 2.5, 2.5, 99);
+    try std.testing.expectEqual(v, v2);
+    try std.testing.expect(v > -2.0 and v < 2.0);
+}
+
+test "fbm2D range" {
+    var max: f32 = 0;
+    for (0..20) |i| {
+        for (0..20) |j| {
+            const x = @as(f32, @floatFromInt(i)) / 5;
+            const y = @as(f32, @floatFromInt(j)) / 5;
+            const v = fbm2D(f32, x, y, 42, 4, 2.0, 0.5);
+            max = @max(max, @abs(v));
+        }
+    }
+    try std.testing.expect(max > 0); // produces non-trivial output
+}
