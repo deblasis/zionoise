@@ -482,3 +482,9 @@ test "fbm2D single octave equals perlin2D" {
     const f = fbm2D(f32, 3.7, 4.2, 42, 1, 1.0, 0.5);
     try std.testing.expectApproxEqAbs(p, f, 0.001);
 }
+
+test "simplex3D varies with z coordinate" {
+    const a = simplex3D(f32, 1.0, 2.0, 0.0, 42);
+    const b = simplex3D(f32, 1.0, 2.0, 1.0, 42);
+    try std.testing.expect(@abs(a - b) > 0.001);
+}
