@@ -546,3 +546,10 @@ test "fbm2D f64" {
     const v = fbm2D(f64, 1.5, 2.5, 42, 4, 2.0, 0.5);
     try std.testing.expect(v > -3.0 and v < 3.0);
 }
+
+test "terrain heightmap slice consistent" {
+    const heightmap = fbm2D(f32, 5.0, 5.0, 42, 4, 2.0, 0.5);
+    // Nearby points should be similar (smooth terrain)
+    const nearby = fbm2D(f32, 5.01, 5.01, 42, 4, 2.0, 0.5);
+    try std.testing.expect(@abs(heightmap - nearby) < 0.1);
+}
