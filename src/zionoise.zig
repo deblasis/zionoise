@@ -336,3 +336,16 @@ test "simplex2D range" {
     }
     try std.testing.expect(max > 0); // produces non-trivial output
 }
+
+test "fbm2D different octaves produce different results" {
+    const v1 = fbm2D(f32, 1.7, 2.3, 42, 2, 2.0, 0.5);
+    const v3 = fbm2D(f32, 1.7, 2.3, 42, 8, 2.0, 0.5);
+    // More octaves = more detail = different value
+    try std.testing.expect(v1 != v3);
+}
+
+test "fbmSimplex2D different lacunarity" {
+    const v1 = fbmSimplex2D(f32, 1.5, 1.5, 42, 4, 2.0, 0.5);
+    const v2 = fbmSimplex2D(f32, 1.5, 1.5, 42, 4, 3.0, 0.5);
+    try std.testing.expect(v1 != v2);
+}
