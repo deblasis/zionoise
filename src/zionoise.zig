@@ -315,3 +315,24 @@ test "fbm2D range" {
     }
     try std.testing.expect(max > 0); // produces non-trivial output
 }
+
+test "perlin2D continuous" {
+    // Perlin noise should be continuous - nearby points should have similar values
+    const a = perlin2D(f32, 1.0, 1.0, 42);
+    const b = perlin2D(f32, 1.001, 1.001, 42);
+    const diff = @abs(a - b);
+    try std.testing.expect(diff < 0.01);
+}
+
+test "simplex2D range" {
+    var max: f32 = 0;
+    for (0..50) |i| {
+        for (0..50) |j| {
+            const x = @as(f32, @floatFromInt(i)) / 10;
+            const y = @as(f32, @floatFromInt(j)) / 10;
+            const v = simplex2D(f32, x, y, 42);
+            max = @max(max, @abs(v));
+        }
+    }
+    try std.testing.expect(max > 0); // produces non-trivial output
+}
