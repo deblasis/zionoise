@@ -534,3 +534,15 @@ test "simplex3D varies with z coordinate" {
 test "example: perlin2D at (0.5, 0.5)" {
     try std.testing.expectApproxEqAbs(@as(f32, 0.75), perlin2D(f32, 0.5, 0.5, 42), 0.01);
 }
+
+test "perlin2D f64 precision" {
+    const a = perlin2D(f64, 0.37, 0.91, 42);
+    const b = perlin2D(f32, 0.37, 0.91, 42);
+    // f64 should give more precision but similar value
+    try std.testing.expectApproxEqAbs(@as(f64, b), a, 0.01);
+}
+
+test "fbm2D f64" {
+    const v = fbm2D(f64, 1.5, 2.5, 42, 4, 2.0, 0.5);
+    try std.testing.expect(v > -3.0 and v < 3.0);
+}
