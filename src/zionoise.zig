@@ -488,3 +488,7 @@ test "simplex3D varies with z coordinate" {
     const b = simplex3D(f32, 1.0, 2.0, 1.0, 42);
     try std.testing.expect(@abs(a - b) > 0.001);
 }
+
+test "example: perlin2D at (0.5, 0.5)" {
+    try std.testing.expectApproxEqAbs(@as(f32, 0.75), perlin2D(f32, 0.5, 0.5, 42), 0.01);
+}

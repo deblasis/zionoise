@@ -37,6 +37,21 @@ zig build test          # Run 37 tests
 zig build run-example   # Run example
 ```
 
+## Example output
+
+```
+$ zig build run-example
+Perlin 2D at (0.5, 0.5): 0.7500
+Simplex 2D at (1.0, 1.0): 0.8805
+fBm (4 octaves): 0.4000
+
+2D Perlin noise:
+.+++++++++....     ..+###++....++#####++
++++####++++++..    .++####++++++#####++.
++###########++..  ..++#####++++######++.
+#############++....++###############+...
+```
+
 ## API
 
 All functions are pure — no state, no allocation.
