@@ -425,3 +425,17 @@ test "perlin2D at integer lattice points is zero" {
     try std.testing.expectApproxEqAbs(@as(f32, 0), perlin2D(f32, 3.0, 7.0, 42), 0.001);
     try std.testing.expectApproxEqAbs(@as(f32, 0), perlin2D(f32, 0.0, 0.0, 42), 0.001);
 }
+
+test "layered noise for terrain heightmap" {
+    // Use perlin2D as base, fbm2D as detail
+    const base = perlin2D(f32, 3.0, 4.0, 42) * 0.5;
+    const detail = fbm2D(f32, 30.0, 40.0, 42, 3, 2.0, 0.5) * 0.5;
+    const height = base + detail;
+    try std.testing.expect(height > -2.0 and height < 2.0);
+}
+
+test "same seed always same result" {
+    const a = perlin2D(f32, 1.5, 2.5, 999);
+    const b = perlin2D(f32, 1.5, 2.5, 999);
+    try std.testing.expectEqual(a, b);
+}
