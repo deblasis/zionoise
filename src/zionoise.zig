@@ -404,3 +404,24 @@ test "simplex3D at integer grid point" {
     // At integer coordinates, 3D simplex can produce zero or near-zero
     try std.testing.expect(v > -2.0 and v < 2.0);
 }
+
+test "fbm2D produces terrain-like output" {
+    // Sample a grid and verify it produces varied output
+    var min: f32 = 100;
+    var max: f32 = -100;
+    for (0..10) |y| {
+        for (0..10) |x| {
+            const v = fbm2D(f32, @as(f32, @floatFromInt(x)) * 0.3, @as(f32, @floatFromInt(y)) * 0.3, 42, 4, 2.0, 0.5);
+            min = @min(min, v);
+            max = @max(max, v);
+        }
+    }
+    // Should have meaningful variation
+    try std.testing.expect(max - min > 0.1);
+}
+
+test "perlin2D at integer lattice points is zero" {
+    // Perlin noise is zero at integer coordinates by construction
+    try std.testing.expectApproxEqAbs(@as(f32, 0), perlin2D(f32, 3.0, 7.0, 42), 0.001);
+    try std.testing.expectApproxEqAbs(@as(f32, 0), perlin2D(f32, 0.0, 0.0, 42), 0.001);
+}
