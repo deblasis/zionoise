@@ -466,3 +466,19 @@ test "simplex2D output range is bounded" {
     }
     try std.testing.expect(max < 2.0);
 }
+
+test "different seeds produce different output" {
+    // At non-integer coords, different seeds should give different values
+    const a = perlin2D(f32, 0.37, 0.91, 42);
+    const b = perlin2D(f32, 0.37, 0.91, 99);
+    const c = perlin2D(f32, 0.37, 0.91, 123);
+    // At least two of three should differ
+    const all_same = @abs(a - b) < 0.0001 and @abs(b - c) < 0.0001;
+    try std.testing.expect(!all_same);
+}
+
+test "fbm2D single octave equals perlin2D" {
+    const p = perlin2D(f32, 3.7, 4.2, 42);
+    const f = fbm2D(f32, 3.7, 4.2, 42, 1, 1.0, 0.5);
+    try std.testing.expectApproxEqAbs(p, f, 0.001);
+}
