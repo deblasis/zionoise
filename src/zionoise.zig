@@ -83,16 +83,58 @@ pub fn simplex3D(comptime T: type, x: T, y: T, z: T, seed: u64) T {
     const y0 = y - Y0;
     const z0 = z - Z0;
 
-    var a_x: i32 = 0; var a_y: i32 = 0; var a_z: i32 = 1;
-    var b_x: i32 = 0; var b_y: i32 = 1; var b_z: i32 = 1;
+    var a_x: i32 = 0;
+    var a_y: i32 = 0;
+    var a_z: i32 = 1;
+    var b_x: i32 = 0;
+    var b_y: i32 = 1;
+    var b_z: i32 = 1;
     if (x0 >= y0) {
-        if (y0 >= z0) { a_x = 1; a_y = 0; a_z = 0; b_x = 1; b_y = 1; b_z = 0; }
-        else if (x0 >= z0) { a_x = 1; a_y = 0; a_z = 0; b_x = 1; b_y = 0; b_z = 1; }
-        else { a_x = 0; a_y = 0; a_z = 1; b_x = 1; b_y = 0; b_z = 1; }
+        if (y0 >= z0) {
+            a_x = 1;
+            a_y = 0;
+            a_z = 0;
+            b_x = 1;
+            b_y = 1;
+            b_z = 0;
+        } else if (x0 >= z0) {
+            a_x = 1;
+            a_y = 0;
+            a_z = 0;
+            b_x = 1;
+            b_y = 0;
+            b_z = 1;
+        } else {
+            a_x = 0;
+            a_y = 0;
+            a_z = 1;
+            b_x = 1;
+            b_y = 0;
+            b_z = 1;
+        }
     } else {
-        if (y0 < z0) { a_x = 0; a_y = 0; a_z = 1; b_x = 0; b_y = 1; b_z = 1; }
-        else if (x0 < z0) { a_x = 0; a_y = 1; a_z = 0; b_x = 0; b_y = 1; b_z = 1; }
-        else { a_x = 0; a_y = 1; a_z = 0; b_x = 1; b_y = 1; b_z = 0; }
+        if (y0 < z0) {
+            a_x = 0;
+            a_y = 0;
+            a_z = 1;
+            b_x = 0;
+            b_y = 1;
+            b_z = 1;
+        } else if (x0 < z0) {
+            a_x = 0;
+            a_y = 1;
+            a_z = 0;
+            b_x = 0;
+            b_y = 1;
+            b_z = 1;
+        } else {
+            a_x = 0;
+            a_y = 1;
+            a_z = 0;
+            b_x = 1;
+            b_y = 1;
+            b_z = 0;
+        }
     }
 
     const x1 = x0 - asFloat(T, a_x) + G;
