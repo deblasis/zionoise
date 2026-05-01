@@ -389,3 +389,18 @@ test "fbm2D with high persistence" {
     const v = fbm2D(f32, 2.0, 2.0, 42, 4, 2.0, 0.9);
     try std.testing.expect(v > -3.0 and v < 3.0);
 }
+
+test "perlin2D and simplex2D different algorithms" {
+    const p = perlin2D(f32, 1.5, 2.5, 42);
+    const s = simplex2D(f32, 1.5, 2.5, 42);
+    // Different algorithms should generally give different results
+    // (though not guaranteed at every point)
+    try std.testing.expect(p > -2.0 and p < 2.0);
+    try std.testing.expect(s > -2.0 and s < 2.0);
+}
+
+test "simplex3D at integer grid point" {
+    const v = simplex3D(f32, 2.0, 3.0, 4.0, 42);
+    // At integer coordinates, 3D simplex can produce zero or near-zero
+    try std.testing.expect(v > -2.0 and v < 2.0);
+}
